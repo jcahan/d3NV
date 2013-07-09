@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link href="../src/nv.d3.css" rel="stylesheet" type="text/css">
+<head>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script> 
+    <script type="text/javascript" src="jquery.tipsy.js"></script>
+    <link href="tipsy.css" rel="stylesheet" type="text/css" />
+  </head>
+
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+#chart1 svg{
+  height: 500px;
+  min-width: 100px;
+  min-height: 100px;
+/*
+  margin: 10px;
+  Minimum height and width is a good idea to prevent negative SVG dimensions...
+  For example width should be =< margin.left + margin.right + 1,
+  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
+*/
+}
+
+</style>
+<body>
+
+  <div id="chart1">
+    <svg></svg>
+  </div>
+
+<script src="../lib/d3.v3.js"></script>
+<script src="../nv.d3.js"></script>
+<!-- including all the components so I don't have to minify every time I test in development -->
+<script src="../src/tooltip.js"></script>
+<script src="../src/utils.js"></script>
+<script src="../src/models/axis.js"></script>
+<script src="../src/models/discreteBar.js"></script>
+<script src="../src/models/discreteBarChart.js"></script>
+<script>
+
+
+
+
+
+historicalBarChart = [ 
+  {
+    key: "Cumulative",
+    values: [
+      {
+        "label" : "restaurants" , 
+        "value" : 1.21
+      } ,
+      {
+        "label" : "mediterranean" , 
+        "value" : 2.24
+      } ,
+      {
+        "label" : "spanish" , 
+        "value" : 1.37
+      } ,
+      {
+        "label" : "tapas bars" , 
+        "value" : 1.31
+      } ,
+      {
+        "label" : "bars" , 
+        "value" : 1.12
+      } ,
+      {
+        "label" : "hotels" , 
+        "value" : 1.94
+      } ,
+      {
+        "label" : "bakeries" , 
+        "value" : 0.96
+      } ,
+      {
+        "label" : "local flavor" , 
+        "value" : 0.88
+      } ,
+      {
+        "label" : "coffee & tea" , 
+        "value" : 0.75
+      } ,
+      {
+        "label" : "women's clothing" , 
+        "value" : 1.31
+      } ,
+      {
+        "label" : "japanese" , 
+        "value" : 0.98
+      } ,
+      {
+        "label" : "italian" , 
+        "value" : 1.15
+      } ,
+      {
+        "label" : "bookstores" , 
+        "value" : 0.55
+      } ,
+      {
+        "label" : "dive bars" , 
+        "value" : 1.08
+      } ,
+      {
+        "label" : "tapas/small plates" , 
+        "value" : 0.71
+      } ,
+      {
+        "label" : "food delivery services" , 
+        "value" : 2.98
+      } ,
+      {
+        "label" : "pizza" , 
+        "value" : 0.45
+      } ,
+      {
+        "label" : "desserts" , 
+        "value" : 0.87
+      } ,
+      {
+        "label" : "beer" , 
+        "value" : 1.29
+      } ,
+      {
+        "label" : "wine" , 
+        "value" : 1.42
+      } ,
+      {
+        "label" : "spirits" , 
+        "value" : 0.76
+      } ,
+      {
+        "label" : "specialty food" , 
+        "value" : 1.57
+      } ,
+      {
+        "label" : "pubs" , 
+        "value" : 1.07
+      } ,
+      {
+        "label" : "cafes" , 
+        "value" : 0.75
+      } ,
+      {
+        "label" : "music venues" , 
+        "value" : 1.27
+      } ,
+      {
+        "label" : "wineries" , 
+        "value" : 1.16
+      } ,
+      {
+        "label" : "breakfast & brunch" , 
+        "value" : 0.96
+      } ,
+      {
+        "label" : "accessories" , 
+        "value" : 1.42
+      } ,
+      {
+        "label" : "home decor" , 
+        "value" : 0.85
+      } ,
+      {
+        "label" : "shoe stores" , 
+        "value" : 0.82
+      } ,
+      {
+        "label" : "arts & crafts" , 
+        "value" : 0.68
+      } ,
+      {
+        "label" : "toy stores" , 
+        "value" : 0.95
+      } ,
+      {
+        "label" : "meat shops" , 
+        "value" : 0.79
+      } ,
+      {
+        "label" : "grocery" , 
+        "value" : 1.34
+      } ,
+      {
+        "label" : "museums" , 
+        "value" : 1.13
+      } ,
+      {
+        "label" : "ice cream & frozen yogurt" , 
+        "value" : 0.96
+      } ,
+      {
+        "label" : "art galleries" , 
+        "value" : 1.08
+      } ,
+      {
+        "label" : "lounges" , 
+        "value" : 1.14
+      } ,
+      {
+        "label" : "men's clothing" , 
+        "value" : 1.63
+      } ,
+      {
+        "label" : "seafood" , 
+        "value" : 0.93
+      } ,
+      {
+        "label" : "personal shopping" , 
+        "value" : 1.70
+      } ,
+      {
+        "label" : "hair salons" , 
+        "value" : 1.64
+      } ,
+      {
+        "label" : "landmarks & historical buildings" , 
+        "value" : 1.02
+      } ,
+      {
+        "label" : "burgers" , 
+        "value" : 0.72
+      } ,
+      {
+        "label" : "dance clubs" , 
+        "value" : 0.98
+      } ,
+      {
+        "label" : "social clubs" , 
+        "value" : 1.26
+      } ,
+      {
+        "label" : "performing arts" , 
+        "value" : 1.44
+      } ,
+      {
+        "label" : "cards & stationery" , 
+        "value" : 3.44
+      } ,
+      {
+        "label" : "antiques" , 
+        "value" : 0.70
+      } ,
+      {
+        "label" : "furniture stores" , 
+        "value" : 1.60
+      } ,
+      {
+        "label" : "fruits & veggies" , 
+        "value" : 0.89
+      } ,
+      {
+        "label" : "children's clothing" , 
+        "value" : 1.09
+      } ,
+      {
+        "label" : "drugstores" , 
+        "value" : 0.49
+      } ,
+      {
+        "label" : "fashion" , 
+        "value" : 1.02
+      } ,
+      {
+        "label" : "cheese shops" , 
+        "value" : 0.75
+      } ,
+      {
+        "label" : "florists" , 
+        "value" : 3.27
+      },
+      {
+  "label" : "modern european" , 
+  "value" : 1.35
+} ,
+{
+  "label" : "sports clubs" , 
+  "value" : 0.95
+} ,
+{
+  "label" : "food" , 
+  "value" : 1.12
+} ,
+{
+  "label" : "specialty schools" , 
+  "value" : 0.44
+} ,
+{
+  "label" : "cosmetics & beauty supply" , 
+  "value" : 1.20
+} ,
+{
+  "label" : "candy stores" , 
+  "value" : 0.73
+} ,
+{
+  "label" : "printing services" , 
+  "value" : 6.10
+} ,
+{
+  "label" : "breweries" , 
+  "value" : 0.95
+} ,
+{
+  "label" : "health markets" , 
+  "value" : 2.43
+} ,
+{
+  "label" : "basque" , 
+  "value" : 0.88
+} ,
+{
+  "label" : "libraries" , 
+  "value" : 1.48
+} ,
+{
+  "label" : "cinema" , 
+  "value" : 0.88
+} ,
+{
+  "label" : "juice bars & smoothies" , 
+  "value" : 1.96
+} ,
+{
+  "label" : "outlet stores" , 
+  "value" : 0.74
+} ,
+{
+  "label" : "parks" , 
+  "value" : 1.16
+} ,
+{
+  "label" : "electronics" , 
+  "value" : 1.22
+} ,
+{
+  "label" : "books" , 
+  "value" : 1.05
+} ,
+{
+  "label" : "mags" , 
+  "value" : 0.63
+} ,
+{
+  "label" : "music" , 
+  "value" : 0.86
+} ,
+{
+  "label" : "video" , 
+  "value" : 1.27
+} ,
+{
+  "label" : "mexican" , 
+  "value" : 1.18
+} ,
+{
+  "label" : "chocolatiers and shops" , 
+  "value" : 1.43
+} ,
+{
+  "label" : "chinese" , 
+  "value" : 1.21
+} ,
+{
+  "label" : "baby gear & furniture" , 
+  "value" : 1.19
+} ,
+{
+  "label" : "sandwiches" , 
+  "value" : 0.94
+} ,
+{
+  "label" : "sports wear" , 
+  "value" : 0.57
+} ,
+{
+  "label" : "shopping" , 
+  "value" : 0.83
+} ,
+{
+  "label" : "argentine" , 
+  "value" : 1.64
+} ,
+{
+  "label" : "flowers & gifts" , 
+  "value" : 2.77
+} ,
+{
+  "label" : "tea rooms" , 
+  "value" : 0.98
+} ,
+{
+  "label" : "farmers market" , 
+  "value" : 1.25
+} ,
+{
+  "label" : "brasseries" , 
+  "value" : 1.26
+} ,
+{
+  "label" : "shopping centers" , 
+  "value" : 1.04
+} ,
+{
+  "label" : "vegetarian" , 
+  "value" : 1.13
+} ,
+{
+  "label" : "music & dvds" , 
+  "value" : 0.55
+} ,
+{
+  "label" : "steakhouses" , 
+  "value" : 0.73
+} ,
+{
+  "label" : "local services" , 
+  "value" : 6.58
+} ,
+{
+  "label" : "medical centers" , 
+  "value" : 2.96
+} ,
+{
+  "label" : "home & garden" , 
+  "value" : 0.61
+} ,
+{
+  "label" : "knitting supplies" , 
+  "value" : 0.69
+} ,
+{
+  "label" : "churches" , 
+  "value" : 1.37
+} ,
+{
+  "label" : "comic books" , 
+  "value" : 0.70
+} ,
+{
+  "label" : "computers" , 
+  "value" : 1.73
+} ,
+{
+  "label" : "french" , 
+  "value" : 1.30
+} ,
+{
+  "label" : "indian" , 
+  "value" : 1.06
+} ,
+{
+  "label" : "photography stores & services" , 
+  "value" : 2.46
+} ,
+{
+  "label" : "eyewear & opticians" , 
+  "value" : 1.74
+} ,
+{
+  "label" : "asian fusion" , 
+  "value" : 1.61
+} ,
+{
+  "label" : "fast food" , 
+  "value" : 1.33
+} ,
+{
+  "label" : "sporting goods" , 
+  "value" : 0.12
+} ,
+{
+  "label" : "public services & government" , 
+  "value" : 3.86
+} ,
+{
+  "label" : "thai" , 
+  "value" : 1.03
+} ,
+{
+  "label" : "educational services" , 
+  "value" : 2.45
+} ,
+{
+  "label" : "diners" , 
+  "value" : 0.86
+} ,
+{
+  "label" : "travel services" , 
+  "value" : 1.95
+} ,
+{
+  "label" : "adult education" , 
+  "value" : 5.04
+} ,
+{
+  "label" : "gyms" , 
+  "value" : 2.07
+} ,
+{
+  "label" : "health and medical" , 
+  "value" : 5.19
+} ,
+{
+  "label" : "nail salons" , 
+  "value" : 1.78
+} ,
+{
+  "label" : "greek" , 
+  "value" : 1.07
+} ,
+{
+  "label" : "musical instruments & teachers" , 
+  "value" : 1.21
+} ,
+{
+  "label" : "kitchen & bath" , 
+  "value" : 2.10
+} ,
+{
+  "label" : "veterinarians" , 
+  "value" : 3.53
+} ,
+{
+  "label" : "hobby shops" , 
+  "value" : 0.52
+} ,
+{
+  "label" : "hardware stores" , 
+  "value" : 0.84
+} ,
+{
+  "label" : "hostels" , 
+  "value" : 1.34
+} ,
+{
+  "label" : "middle eastern" , 
+  "value" : 1.22
+} ,
+{
+  "label" : "physical therapy" , 
+  "value" : 4.41
+} ,
+{
+  "label" : "interior design" , 
+  "value" : 4.23
+} ,
+{
+  "label" : "art supplies" , 
+  "value" : 1.07
+} ,
+{
+  "label" : "jewelry" , 
+  "value" : 1.07
+} ,
+{
+  "label" : "gluten-free" , 
+  "value" : 1.08
+} ,
+{
+  "label" : "outdoor gear" , 
+  "value" : 0.88
+} ,
+{
+  "label" : "skin care" , 
+  "value" : 1.94
+} ,
+{
+  "label" : "framing" , 
+  "value" : 1.21
+} ,
+{
+  "label" : "massage" , 
+  "value" : 2.22
+} ,
+{
+  "label" : "department stores" , 
+  "value" : 0.50
+} ,
+{
+  "label" : "hair removal" , 
+  "value" : 4.54
+} ,
+{
+  "label" : "delis" , 
+  "value" : 0.72
+} ,
+{
+  "label" : "jazz & blues" , 
+  "value" : 0.87
+} ,
+{
+  "label" : "thrift stores" , 
+  "value" : 1.00
+} ,
+{
+  "label" : "colleges & universities" , 
+  "value" : 11.08
+} ,
+{
+  "label" : "arts & entertainment" , 
+  "value" : 1.80
+} ,
+{
+  "label" : "used clothing" , 
+  "value" : 0.92
+} ,
+{
+  "label" : "vintage" , 
+  "value" : 0.83
+} ,
+{
+  "label" : "consignment" , 
+  "value" : 1.06
+} ,
+{
+  "label" : "pet stores" , 
+  "value" : 1.01
+} ,
+{
+  "label" : "hot dogs" , 
+  "value" : 0.88
+} ,
+{
+  "label" : "office equipment" , 
+  "value" : 3.24
+} ,
+{
+  "label" : "buffets" , 
+  "value" : 0.73
+} ,
+{
+  "label" : "education" , 
+  "value" : 5.77
+} ,
+{
+  "label" : "graphic design" , 
+  "value" : 7.33
+} ,
+{
+  "label" : "creperies" , 
+  "value" : 1.11
+} ,
+{
+  "label" : "lingerie" , 
+  "value" : 0.78
+} ,
+{
+  "label" : "art schools" , 
+  "value" : 9.36
+} ,
+{
+  "label" : "do-it-yourself food" , 
+  "value" : 1.43
+} ,
+{
+  "label" : "vinyl records" , 
+  "value" : 0.65
+} ,
+{
+  "label" : "barbers" , 
+  "value" : 1.32
+} ,
+{
+  "label" : "bikes" , 
+  "value" : 0.61
+} ,
+{
+  "label" : "dim sum" , 
+  "value" : 1.40
+} ,
+{
+  "label" : "professional services" , 
+  "value" : 4.50
+} ,
+{
+  "label" : "videos and video game rental" , 
+  "value" : 3.17
+} ,
+{
+  "label" : "appliances" , 
+  "value" : 1.55
+} ,
+{
+  "label" : "catalan" , 
+  "value" : 1.28
+} ,
+{
+  "label" : "advertising" , 
+  "value" : 2.62
+} ,
+{
+  "label" : "motorcycle repair" , 
+  "value" : 4.52
+} ,
+{
+  "label" : "motorcycle dealers" , 
+  "value" : 1.18
+} ,
+{
+  "label" : "dentists" , 
+  "value" : 5.37
+} ,
+{
+  "label" : "building supplies" , 
+  "value" : 1.38
+} ,
+{
+  "label" : "adult" , 
+  "value" : 1.13
+} ,
+{
+  "label" : "wine bars" , 
+  "value" : 1.44
+} ,
+{
+  "label" : "pakistani" , 
+  "value" : 0.90
+} ,
+{
+  "label" : "active life" , 
+  "value" : 1.72
+} ,
+{
+  "label" : "auto repair" , 
+  "value" : 4.35
+} ,
+{
+  "label" : "fabric stores" , 
+  "value" : 0.55
+} ,
+{
+  "label" : "venues & event spaces" , 
+  "value" : 3.84
+} ,
+{
+  "label" : "sushi bars" , 
+  "value" : 1.60
+} ,
+{
+  "label" : "tobacco shops" , 
+  "value" : 1.40
+} ,
+{
+  "label" : "ethnic food" , 
+  "value" : 1.20
+} ,
+{
+  "label" : "language schools" , 
+  "value" : 3.22
+} ,
+{
+  "label" : "newspapers & magazines" , 
+  "value" : 1.14
+} ,
+{
+  "label" : "handyman" , 
+  "value" : 3.40
+} ,
+{
+  "label" : "tours" , 
+  "value" : 1.58
+} ,
+{
+  "label" : "gay bars" , 
+  "value" : 0.97
+} ,
+{
+  "label" : "american traditional" , 
+  "value" : 0.92
+} ,
+{
+  "label" : "lighting fixtures & equipment" , 
+  "value" : 1.79
+} ,
+{
+  "label" : "photographers" , 
+  "value" : 2.29
+} ,
+{
+  "label" : "day spas" , 
+  "value" : 1.95
+} ,
+{
+  "label" : "leather goods" , 
+  "value" : 0.99
+} ,
+{
+  "label" : "community service/non-profit" , 
+  "value" : 1.29
+} ,
+{
+  "label" : "nightlife" , 
+  "value" : 1.10
+} ,
+{
+  "label" : "tattoo" , 
+  "value" : 1.17
+} ,
+{
+  "label" : "vegan" , 
+  "value" : 1.00
+} ,
+{
+  "label" : "parking" , 
+  "value" : 1.39
+} ,
+{
+  "label" : "yoga" , 
+  "value" : 1.22
+} ,
+{
+  "label" : "leisure centers" , 
+  "value" : 1.72
+} ,
+{
+  "label" : "festivals" , 
+  "value" : 0.72
+} ,
+{
+  "label" : "car wash" , 
+  "value" : 1.64
+} ,
+{
+  "label" : "midwives" , 
+  "value" : 2.93
+} ,
+{
+  "label" : "soccer" , 
+  "value" : 0.84
+} ,
+{
+  "label" : "hotels & travel" , 
+  "value" : 1.38
+} ,
+{
+  "label" : "airlines" , 
+  "value" : 0.58
+} ,
+{
+  "label" : "dog parks" , 
+  "value" : 1.19
+} ,
+{
+  "label" : "nutritionists" , 
+  "value" : 4.68
+} ,
+{
+  "label" : "video/film production" , 
+  "value" : 6.11
+} ,
+{
+  "label" : "hospitals" , 
+  "value" : 2.50
+} ,
+{
+  "label" : "latin american" , 
+  "value" : 1.49
+} ,
+{
+  "label" : "caterers" , 
+  "value" : 2.50
+} ,
+{
+  "label" : "sewing & alterations" , 
+  "value" : 1.08
+} ,
+{
+  "label" : "karaoke" , 
+  "value" : 0.65
+} ,
+{
+  "label" : "elementary schools" , 
+  "value" : 2.78
+} ,
+{
+  "label" : "electricians" , 
+  "value" : 7.42
+} ,
+{
+  "label" : "skating rinks" , 
+  "value" : 0.87
+} ,
+{
+  "label" : "playgrounds" , 
+  "value" : 1.37
+} ,
+{
+  "label" : "shoe repair" , 
+  "value" : 0.83
+} ,
+{
+  "label" : "contractors" , 
+  "value" : 5.39
+} ,
+{
+  "label" : "discount store" , 
+  "value" : 1.11
+} ,
+{
+  "label" : "guest houses" , 
+  "value" : 1.18
+} ,
+{
+  "label" : "speech therapists" , 
+  "value" : 3.17
+} ,
+{
+  "label" : "doctors" , 
+  "value" : 2.45
+} ,
+{
+  "label" : "cooking schools" , 
+  "value" : 13.65
+} ,
+{
+  "label" : "churros" , 
+  "value" : 0.55
+} ,
+{
+  "label" : "seafood markets" , 
+  "value" : 0.87
+} ,
+{
+  "label" : "german" , 
+  "value" : 0.96
+} ,
+{
+  "label" : "british" , 
+  "value" : 0.78
+} ,
+{
+  "label" : "public transportation" , 
+  "value" : 1.32
+} ,
+{
+  "label" : "body shops" , 
+  "value" : 1.77
+} ,
+{
+  "label" : "acupuncture" , 
+  "value" : 2.62
+} ,
+{
+  "label" : "bed & breakfast" , 
+  "value" : 1.17
+} ,
+{
+  "label" : "laser eye surgery/lasik" , 
+  "value" : 13.07
+} ,
+{
+  "label" : "sports bars" , 
+  "value" : 1.45
+} ,
+{
+  "label" : "orthopedists" , 
+  "value" : 1.95
+} ,
+{
+  "label" : "print media" , 
+  "value" : 2.94
+} ,
+{
+  "label" : "arcades" , 
+  "value" : 0.96
+} ,
+{
+  "label" : "stadiums & arenas" , 
+  "value" : 1.07
+} ,
+{
+  "label" : "pet services" , 
+  "value" : 2.01
+} ,
+{
+  "label" : "traditional chinese medicine" , 
+  "value" : 2.37
+} ,
+{
+  "label" : "auto parts & supplies" , 
+  "value" : 1.39
+} ,
+{
+  "label" : "preschools" , 
+  "value" : 2.02
+} ,
+{
+  "label" : "painters" , 
+  "value" : 2.12
+} ,
+{
+  "label" : "counseling & mental health" , 
+  "value" : 6.93
+} ,
+{
+  "label" : "bike rentals" , 
+  "value" : 1.53
+} ,
+{
+  "label" : "middle schools & high schools" , 
+  "value" : 2.16
+} ,
+{
+  "label" : "lawyers" , 
+  "value" : 12.42
+} ,
+{
+  "label" : "keys & locksmiths" , 
+  "value" : 10.76
+} ,
+{
+  "label" : "nurseries & gardening" , 
+  "value" : 1.08
+} ,
+{
+  "label" : "convenience stores" , 
+  "value" : 1.89
+} ,
+{
+  "label" : "swimming pools" , 
+  "value" : 1.71
+} ,
+{
+  "label" : "child care & day care" , 
+  "value" : 2.79
+} ,
+{
+  "label" : "beauty and spas" , 
+  "value" : 2.01
+} ,
+{
+  "label" : "home cleaning" , 
+  "value" : 4.72
+} ,
+{
+  "label" : "party & event planning" , 
+  "value" : 2.40
+} ,
+{
+  "label" : "mattresses" , 
+  "value" : 2.44
+} ,
+{
+  "label" : "event planning & services" , 
+  "value" : 4.18
+} ,
+{
+  "label" : "funeral services & cemeteries" , 
+  "value" : 2.82
+} ,
+{
+  "label" : "gardeners" , 
+  "value" : 0.64
+} ,
+{
+  "label" : "limos" , 
+  "value" : 3.04
+} ,
+{
+  "label" : "shades & blinds" , 
+  "value" : 2.19
+} ,
+{
+  "label" : "apartments" , 
+  "value" : 1.13
+} ,
+{
+  "label" : "tutoring centers" , 
+  "value" : 4.86
+} ,
+{
+  "label" : "portuguese" , 
+  "value" : 1.22
+} ,
+{
+  "label" : "signature cuisine" , 
+  "value" : 0.55
+} ,
+{
+  "label" : "adult entertainment" , 
+  "value" : 0.98
+} ,
+{
+  "label" : "hookah bars" , 
+  "value" : 1.42
+} ,
+{
+  "label" : "costumes" , 
+  "value" : 0.54
+} ,
+{
+  "label" : "chiropractors" , 
+  "value" : 4.39
+} ,
+{
+  "label" : "watches" , 
+  "value" : 0.95
+} ,
+{
+  "label" : "dance schools" , 
+  "value" : 1.51
+} ,
+{
+  "label" : "transportation" , 
+  "value" : 2.19
+} ,
+{
+  "label" : "plumbing" , 
+  "value" : 8.68
+} ,
+{
+  "label" : "gas & service stations" , 
+  "value" : 0.91
+} ,
+{
+  "label" : "home health care" , 
+  "value" : 4.33
+} ,
+{
+  "label" : "luggage" , 
+  "value" : 1.00
+} ,
+{
+  "label" : "korean" , 
+  "value" : 0.79
+} ,
+{
+  "label" : "insurance" , 
+  "value" : 12.38
+} ,
+{
+  "label" : "driving schools" , 
+  "value" : 2.53
+} ,
+{
+  "label" : "bowling" , 
+  "value" : 0.82
+} ,
+{
+  "label" : "food stands" , 
+  "value" : 0.96
+} ,
+{
+  "label" : "marketing" , 
+  "value" : 8.27
+} ,
+{
+  "label" : "web design" , 
+  "value" : 7.52
+} ,
+{
+  "label" : "butcher" , 
+  "value" : 1.29
+} ,
+{
+  "label" : "radio stations" , 
+  "value" : 0.69
+} ,
+{
+  "label" : "wedding planning" , 
+  "value" : 1.65
+} ,
+{
+  "label" : "mobile phones" , 
+  "value" : 1.71
+} ,
+{
+  "label" : "brazilian" , 
+  "value" : 1.28
+} ,
+{
+  "label" : "car dealers" , 
+  "value" : 3.21
+} ,
+{
+  "label" : "climbing" , 
+  "value" : 1.08
+} ,
+{
+  "label" : "test preparation" , 
+  "value" : 2.48
+} ,
+{
+  "label" : "general litigation" , 
+  "value" : 5.00
+} ,
+{
+  "label" : "dance studios" , 
+  "value" : 1.47
+} ,
+{
+  "label" : "real estate services" , 
+  "value" : 2.89
+} ,
+{
+  "label" : "cuban" , 
+  "value" : 0.93
+} ,
+{
+  "label" : "maternity wear" , 
+  "value" : 1.15
+} ,
+{
+  "label" : "oil change stations" , 
+  "value" : 3.35
+} ,
+{
+  "label" : "beer bar" , 
+  "value" : 1.18
+} ,
+{
+  "label" : "tires" , 
+  "value" : 1.66
+} ,
+{
+  "label" : "cannabis clinics" , 
+  "value" : 2.14
+} ,
+{
+  "label" : "dry cleaning & laundry" , 
+  "value" : 1.88
+} ,
+{
+  "label" : "galician" , 
+  "value" : 1.12
+} ,
+{
+  "label" : "pool halls" , 
+  "value" : 1.34
+} ,
+{
+  "label" : "medical spas" , 
+  "value" : 2.93
+} ,
+{
+  "label" : "it services & computer repair" , 
+  "value" : 5.89
+} ,
+{
+  "label" : "property management" , 
+  "value" : 2.56
+} ,
+{
+  "label" : "career counseling" , 
+  "value" : 4.29
+} ,
+{
+  "label" : "recording & rehearsal studios" , 
+  "value" : 1.60
+} ,
+{
+  "label" : "beaches" , 
+  "value" : 1.04
+} ,
+{
+  "label" : "comedy clubs" , 
+  "value" : 0.95
+} ,
+{
+  "label" : "halal" , 
+  "value" : 1.13
+} ,
+{
+  "label" : "furniture reupholstery" , 
+  "value" : 1.35
+} ,
+{
+  "label" : "oral surgeons" , 
+  "value" : 4.30
+} ,
+{
+  "label" : "amateur sports teams" , 
+  "value" : 3.25
+} ,
+{
+  "label" : "obstetricians and gynecologists" , 
+  "value" : 2.85
+} ,
+{
+  "label" : "moroccan" , 
+  "value" : 0.84
+} ,
+{
+  "label" : "casinos" , 
+  "value" : 1.62
+} ,
+{
+  "label" : "salad" , 
+  "value" : 0.65
+} ,
+{
+  "label" : "golf" , 
+  "value" : 1.01
+} ,
+{
+  "label" : "departments of motor vehicles" , 
+  "value" : 0.78
+} ,
+{
+  "label" : "persian/iranian" , 
+  "value" : 1.26
+} ,
+{
+  "label" : "kosher" , 
+  "value" : 1.23
+} ,
+{
+  "label" : "home services" , 
+  "value" : 6.75
+} ,
+
+{
+  "label" : "naturopathic/holistic" , 
+  "value" : 1.00
+} ,
+{
+  "label" : "self storage" , 
+  "value" : 4.51
+} ,
+{
+  "label" : "internet cafes" , 
+  "value" : 2.38
+} ,
+{
+  "label" : "botanical gardens" , 
+  "value" : 0.65
+} ,
+{
+  "label" : "bridal" , 
+  "value" : 1.08
+} ,
+{
+  "label" : "wholesale stores" , 
+  "value" : 1.18
+} ,
+{
+  "label" : "train stations" , 
+  "value" : 0.95
+} ,
+{
+  "label" : "boating" , 
+  "value" : 0.79
+} ,
+{
+  "label" : "orthodontists" , 
+  "value" : 5.34
+} ,
+{
+  "label" : "animal shelters" , 
+  "value" : 1.44
+} ,
+{
+  "label" : "mass media" , 
+  "value" : 2.20
+} ,
+{
+  "label" : "ophthalmologists" , 
+  "value" : 2.94
+} ,
+{
+  "label" : "tabernas" , 
+  "value" : 1.29
+} ,
+{
+  "label" : "trainers" , 
+  "value" : 2.89
+} ,
+{
+  "label" : "retirement homes" , 
+  "value" : 3.98
+} ,
+{
+  "label" : "champagne bars" , 
+  "value" : 2.38
+} ,
+{
+  "label" : "heating & air conditioning/hvac" , 
+  "value" : 1.00
+} ,
+{
+  "label" : "amusement parks" , 
+  "value" : 2.13
+} ,
+{
+  "label" : "pets" , 
+  "value" : 0.45
+} ,
+{
+  "label" : "party supplies" , 
+  "value" : 0.50
+} ,
+{
+  "label" : "banks & credit unions" , 
+  "value" : 2.09
+} ,
+{
+  "label" : "family practice" , 
+  "value" : 3.04
+} ,
+{
+  "label" : "opera & ballet" , 
+  "value" : 0.60
+} ,
+{
+  "label" : "djs" , 
+  "value" : 1.09
+} ,
+{
+  "label" : "automotive" , 
+  "value" : 2.05
+} ,
+{
+  "label" : "cosmetic surgeons" , 
+  "value" : 5.56
+} ,
+{
+  "label" : "airports" , 
+  "value" : 1.38
+} ,
+{
+  "label" : "couriers & delivery services" , 
+  "value" : 3.10
+} ,
+{
+  "label" : "real estate law" , 
+  "value" : 5.22
+} ,
+{
+  "label" : "campgrounds" , 
+  "value" : 0.87
+} ,
+{
+  "label" : "university housing" , 
+  "value" : 1.47
+} ,
+{
+  "label" : "makeup artists" , 
+  "value" : 2.87
+} ,
+{
+  "label" : "urgent care" , 
+  "value" : 2.60
+} ,
+{
+  "label" : "architects" , 
+  "value" : 2.18
+} ,
+{
+  "label" : "zoos" , 
+  "value" : 0.66
+} ,
+{
+  "label" : "watch repair" , 
+  "value" : 1.13
+} ,
+{
+  "label" : "piercing" , 
+  "value" : 0.59
+} ,
+{
+  "label" : "massage schools" , 
+  "value" : 12.46
+} ,
+{
+  "label" : "pediatric dentists" , 
+  "value" : 5.31
+} ,
+{
+  "label" : "weight loss centers" , 
+  "value" : 4.47
+} ,
+{
+  "label" : "optometrists" , 
+  "value" : 3.08
+} ,
+{
+  "label" : "pet groomers" , 
+  "value" : 2.33
+} ,
+{
+  "label" : "tai chi" , 
+  "value" : 0.85
+} ,
+{
+  "label" : "car rental" , 
+  "value" : 1.93
+} ,
+{
+  "label" : "belgian" , 
+  "value" : 0.85
+} ,
+{
+  "label" : "carpeting" , 
+  "value" : 2.09
+} ,
+{
+  "label" : "flooring" , 
+  "value" : 2.37
+} ,
+{
+  "label" : "windows installation" , 
+  "value" : 3.60
+} ,
+{
+  "label" : "internal medicine" , 
+  "value" : 2.71
+} ,
+{
+  "label" : "vocational and technical school" , 
+  "value" : 9.74
+} ,
+{
+  "label" : "public relations" , 
+  "value" : 3.31
+} ,
+{
+  "label" : "pilates" , 
+  "value" : 1.24
+} ,
+{
+  "label" : "office cleaning" , 
+  "value" : 4.90
+} ,
+{
+  "label" : "television stations" , 
+  "value" : 1.40
+} ,
+{
+  "label" : "window washing" , 
+  "value" : 4.80
+} ,
+{
+  "label" : "real estate" , 
+  "value" : 1.54
+} ,
+{
+  "label" : "martial arts" , 
+  "value" : 1.15
+} ,
+{
+  "label" : "fishing" , 
+  "value" : 0.88
+} ,
+{
+  "label" : "live/raw food" , 
+  "value" : 0.87
+} ,
+{
+  "label" : "religious organizations" , 
+  "value" : 2.25
+} ,
+{
+  "label" : "accountants" , 
+  "value" : 6.06
+} ,
+{
+  "label" : "swimming lessons/schools" , 
+  "value" : 1.00
+} ,
+{
+  "label" : "arabian" , 
+  "value" : 0.87
+} ,
+{
+  "label" : "dermatologists" , 
+  "value" : 2.59
+} ,
+{
+  "label" : "security systems" , 
+  "value" : 14.59
+} ,
+{
+  "label" : "gastropubs" , 
+  "value" : 1.54
+} ,
+{
+  "label" : "horseback riding" , 
+  "value" : 1.22
+} ,
+{
+  "label" : "hiking" , 
+  "value" : 1.32
+} ,
+{
+  "label" : "diving" , 
+  "value" : 1.38
+} ,
+{
+  "label" : "swimwear" , 
+  "value" : 1.11
+} ,
+{
+  "label" : "peruvian" , 
+  "value" : 1.38
+} ,
+{
+  "label" : "bespoke clothing" , 
+  "value" : 2.43
+} ,
+{
+  "label" : "caribbean" , 
+  "value" : 0.99
+} ,
+{
+  "label" : "buddhist temples" , 
+  "value" : 1.34
+} ,
+{
+  "label" : "notaries" , 
+  "value" : 1.78
+} ,
+{
+  "label" : "go karts" , 
+  "value" : 0.51
+} ,
+{
+  "label" : "electronics repair" , 
+  "value" : 2.50
+} ,
+{
+  "label" : "flight instruction" , 
+  "value" : 2.52
+} ,
+{
+  "label" : "financial services" , 
+  "value" : 1.85
+} ,
+{
+  "label" : "appliances & repair" , 
+  "value" : 5.23
+} ,
+{
+  "label" : "aquariums" , 
+  "value" : 0.64
+} ,
+{
+  "label" : "rv rental" , 
+  "value" : 1.04
+} ,
+{
+  "label" : "police departments" , 
+  "value" : 1.01
+} ,
+{
+  "label" : "tennis" , 
+  "value" : 0.96
+} ,
+{
+  "label" : "carpet installation" , 
+  "value" : 4.40
+} ,
+{
+  "label" : "real estate agents" , 
+  "value" : 1.74
+} ,
+{
+  "label" : "personal chefs" , 
+  "value" : 1.69
+} ,
+{
+  "label" : "pool cleaners" , 
+  "value" : 1.62
+} ,
+{
+  "label" : "cajun" , 
+  "value" : 0.59
+} ,
+{
+  "label" : "creole" , 
+  "value" : 0.65
+} ,
+{
+  "label" : "street vendors" , 
+  "value" : 1.12
+} ,
+{
+  "label" : "gun ranges" , 
+  "value" : 0.86
+} ,
+{
+  "label" : "rifle ranges" , 
+  "value" : 0.84
+} ,
+{
+  "label" : "cosmetology schools" , 
+  "value" : 5.53
+} ,
+{
+  "label" : "private tutors" , 
+  "value" : 5.03
+} ,
+{
+  "label" : "tablao flamenco" , 
+  "value" : 0.83
+} ,
+{
+  "label" : "endodontists" , 
+  "value" : 4.44
+} ,
+{
+  "label" : "landscape architects" , 
+  "value" : 2.76
+} ,
+{
+  "label" : "mountain biking" , 
+  "value" : 0.89
+} ,
+{
+  "label" : "private investigation" , 
+  "value" : 5.33
+} ,
+{
+  "label" : "herbs and spices" , 
+  "value" : 1.13
+} ,
+{
+  "label" : "internet service providers" , 
+  "value" : 8.33
+} ,
+{
+  "label" : "psychics & astrologers" , 
+  "value" : 8.18
+} ,
+{
+  "label" : "rafting" , 
+  "value" : 1.78
+} ,
+{
+  "label" : "kayaking" , 
+  "value" : 0.46
+} ,
+{
+  "label" : "fitness & instruction" , 
+  "value" : 2.08
+} ,
+{
+  "label" : "life coach" , 
+  "value" : 4.25
+} ,
+{
+  "label" : "junk removal and hauling" , 
+  "value" : 6.23
+} ,
+{
+  "label" : "financial advising" , 
+  "value" : 12.24
+} ,
+{
+  "label" : "tree services" , 
+  "value" : 5.90
+} ,
+{
+  "label" : "russian" , 
+  "value" : 1.43
+} ,
+{
+  "label" : "afghan" , 
+  "value" : 0.67
+} ,
+{
+  "label" : "pet boarding" , 
+  "value" : 2.68
+} ,
+{
+  "label" : "pet sitting" , 
+  "value" : 3.08
+} ,
+{
+  "label" : "osteopathic physicians" , 
+  "value" : 2.21
+} ,
+{
+  "label" : "dog walkers" , 
+  "value" : 2.68
+} ,
+{
+  "label" : "movers" , 
+  "value" : 9.25
+} ,
+{
+  "label" : "post offices" , 
+  "value" : 0.96
+} ,
+{
+  "label" : "pawn shops" , 
+  "value" : 2.17
+} ,
+{
+  "label" : "professional sports teams" , 
+  "value" : 1.24
+} ,
+{
+  "label" : "african" , 
+  "value" : 1.22
+} ,
+{
+  "label" : "taxis" , 
+  "value" : 1.79
+} ,
+{
+  "label" : "fertility" , 
+  "value" : 2.13
+} ,
+{
+  "label" : "screen printing" , 
+  "value" : 2.08
+} ,
+{
+  "label" : "irish" , 
+  "value" : 0.96
+} ,
+{
+  "label" : "audiologist" , 
+  "value" : 3.14
+} ,
+{
+  "label" : "taiwanese" , 
+  "value" : 1.45
+} ,
+{
+  "label" : "skydiving" , 
+  "value" : 1.28
+} ,
+{
+  "label" : "tanning" , 
+  "value" : 1.27
+} ,
+{
+  "label" : "recycling center" , 
+  "value" : 1.49
+} ,
+{
+  "label" : "carpenters" , 
+  "value" : 1.89
+}
+
+    ]
+  }
+];
+
+
+
+
+nv.addGraph(function() {  
+  var chart = nv.models.discreteBarChart()
+      .x(function(d) { return d.label })
+      .y(function(d) { return d.value })
+      .staggerLabels(true)
+      //.staggerLabels(historicalBarChart[0].values.length > 8)
+      .tooltips(false)
+      .showValues(false)
+
+  d3.select('#chart1 svg')
+      .datum(historicalBarChart)
+    .transition().duration(500)
+      .call(chart);
+
+   //Adding all of this now...
+   var w = 800, h = 500;   
+
+   $('nv-bar').tipsy({ 
+    gravity: 'w', 
+    html: true, 
+    title: function() {
+      var d = this.__data__, c = d.value;
+      return 'Hi there! My value is: ' + d; 
+    }
+  });
+
+  nv.utils.windowResize(chart.update);
+
+
+  return chart;
+});
+
+
+</script>
